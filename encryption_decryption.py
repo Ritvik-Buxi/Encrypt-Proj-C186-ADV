@@ -20,9 +20,9 @@ def startDecryption():
     decryption_text_data = Text(decryption_window, height=20, width=72)
     decryption_text_data.place(relx=0.5,rely=0.35, anchor=CENTER)
     
-    btn_open_file = Button(decryption_window, text="Choose File..",relief=FLAT, padx=10, bg="#cbff00", font='arial 13')
+    btn_open_file = Button(decryption_window, text="Choose File..",relief=FLAT, padx=10, bg="#cbff00", font='arial 13',command=viewData)
     btn_open_file.place(relx=0.5,rely=0.8, anchor=CENTER)
-    
+
     decryption_window.mainloop()
     
     
@@ -76,6 +76,16 @@ def saveData():
             encryption_text_data.delete(1.0,END)
             messagebox.showinfo("Info","Saved The File")
             f.close()
+def viewData():
+    global decryption_text_data
+    text_file = fd.askopenfilename(title="Open a File",filetypes=(("Text Files","*.txt"),))
+    with open(text_file, mode="r") as f:
+        data = f.read()
+        byte_str = bytes.fromhex(data)
+        orig = decrypt("ICE",byte_str)
+        final_msg = orig.decode("utf-8")
+        decryption_text_data.insert(END,final_msg)
+
 heading_label = Label(root, text="Encryption & Decryption",
                       font='arial 18 italic', bg="#99c9f5")
 heading_label.place(relx=0.5,rely=0.2, anchor=CENTER)
@@ -89,4 +99,5 @@ btn_start_decryption = Button(root, text="Start Decryption", font='arial 13',
 btn_start_decryption.place(relx=0.7,rely=0.6, anchor=CENTER)
 
 root.mainloop()
+
 
